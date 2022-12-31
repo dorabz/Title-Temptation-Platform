@@ -12,4 +12,4 @@ TO DO:
 
 - refactor code: use store, add error handling
 
-- funcionalities: add rating system, change password option, add movie suggestion system
+- funcionalities: add rating system, change password option, add movie suggestion system, pagination, search, random movie
