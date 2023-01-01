@@ -23,10 +23,11 @@ class MovieSerializer(serializers.ModelSerializer):
         ]
 
 class RatingSerializer(serializers.ModelSerializer):
-    movie = MovieSerializer(read_only=True)
+
     class Meta:
         model = Rating
         fields = ['id', 'user', 'movie', 'rating']
+        partial = True
 
 class WatchedSerializer(serializers.ModelSerializer):
 

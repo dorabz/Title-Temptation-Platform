@@ -33,6 +33,7 @@ class RatingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Rating.objects.all()
     serializer_class = serializers.RatingSerializer
 
+
 class WatchedList(generics.ListCreateAPIView):
     queryset = Watched.objects.all()
     serializer_class = serializers.WatchedSerializer

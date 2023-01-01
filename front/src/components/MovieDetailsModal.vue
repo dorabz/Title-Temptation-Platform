@@ -85,6 +85,10 @@
         errors: []
       }
     },
+    created() {
+      this.$store.dispatch('fetchWishlist')
+      this.$store.dispatch('fetchWatched')
+    },
     methods: {
       closeModal() {
         this.isModalActive = false
@@ -94,7 +98,6 @@
           const days = parseInt(duration.split(":")[0], 10);
           const hours = parseInt(duration.split(":")[1], 10);
           const minutes = parseInt(duration.split(":")[2], 10);
-
           const totalHours = days * 24 + hours;
 
           let formattedDuration = "";
@@ -104,65 +107,77 @@
           if (minutes > 0) {
               formattedDuration += `${minutes} mins`;
           }
-
           return formattedDuration;
       },
       async addToWishlist(movie) {
-          this.errors = []
-          const userId = this.$store.state.user.id
-          const watched = await axios.get(`/api/watched/?user=${userId}`)
-          const watchedToDelete = watched.data.find(item => item.movie === movie.id)
-
-          if (watchedToDelete ) {
-            await axios.delete(`/api/watched/${watchedToDelete}/`)
-          }
-
-          const data = {
+        this.errors = []
+        const userId = this.$store.state.user.id
+        const watched = this.$store.state.watched
+        const wishlist = this.$store.state.wishlist
+     
+        if (watched.some(item => item.movie === movie.id)) {
+          this.errors.push('This movie is already in the watched list. It cannot be added to the wishlist.')
+        } else if (wishlist.some(item => item.movie === movie.id)) {
+          this.errors.push('This movie is already in the wishlist.')
+        } else {
+          // Movie is not in the watched list, add it to the wishlist
+          try {
+            const response = await axios.post('/api/wishlist/', {
               user: userId,
               movie: movie.id
+            })
+
+            // Update the wishlist state
+            this.$store.commit('setWishlist', response.data.wishlist)
+            this.isAddedToWishlist = true
+            this.$emit('close')
+            toast({
+              message: `${movie.title} has been added to your wishlist.`,
+              type: 'is-success',
+              duration: 3000,
+              position: 'bottom-center',
+              dismissible: true
+            })
+          } catch (error) {
+            console.log(error)
           }
-    
-          await axios.post('/api/wishlist/', data)
-                      .then(response => {
-                            toast({
-                                message: 'Movie added to wishlist',
-                                type: 'is-success',
-                                dismissible: true,
-                                pauseOnHover: true,
-                                duration: 2000,
-                                position: 'bottom-right',
-                              })
-                        })
-                        .catch(error => {
-                            if (error.response) {
-                                for (const property in error.response.data) {
-                                    this.errors.push(`${property}: ${error.response.data[property]}`)
-                                }
-                            } else if (error.message) {
-                                this.errors.push('Something went wrong. Please try again!')
-                            }
-                          })
-          
-              this.isAddedToWishlist = true
-          },
-          async addToWatched(movie) {
-              const userId = this.$store.state.user.id
-              const wishlist = await axios.get(`/api/wishlist/?user=${userId}`)
-              const wishlistToDelete = wishlist.data.find(item => item.movie === movie.id)
+        }
+      },
+      async addToWatched(movie) {
+        this.errors = []
+        const userId = this.$store.state.user.id
+        const watched = this.$store.state.watched
+        const wishlist = this.$store.state.wishlist
+        
 
-              if (wishlistToDelete) {
-                await axios.delete(`/api/wishlist/${wishlistToDelete}/`)
-              }
-              const data = {
-                user: userId,
-                movie: movie.id
-              }
+        if (wishlist.some(item => item.movie === movie.id)) {
+          this.errors.push('This movie is already in the wishlist. It cannot be added to the watched list.')
+        } else if (watched.some(item => item.movie === movie.id)) {
+          this.errors.push('This movie is already in the watched list.')
+        } else {
+          // Movie is not in the wishlist, add it to the watched list
+          try {
+            const response = await axios.post('/api/watched/', {
+              user: userId,
+              movie: movie.id
+            })
 
-              await axios.post('/api/watched/', data)
-      
-              this.isAddedToWatched = true
-          },
-
+            // Update the watched state
+            this.$store.commit('setWatched', response.data.watched)
+            this.isAddedToWatched = true
+            this.$emit('close')
+            toast({
+              message: `${movie.title} has been added to your watched list.`,
+              type: 'is-success',
+              duration: 3000,
+              position: 'bottom-center',
+              dismissible: true
+            })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      },
     }
   }
 </script>

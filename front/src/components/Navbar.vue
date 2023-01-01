@@ -13,8 +13,8 @@
             <div class="navbar-end">
                 <template v-if="$store.state.isAuthenticated">
                     <router-link to="/movies" class="navbar-item">All Movies</router-link>
-                    <router-link to="/wishlist" class="navbar-item">Wishlist  <font-awesome-icon icon="heart" /></router-link>
-                    <router-link to="/watched" class="navbar-item">Watched</router-link>
+                    <router-link to="/wishlist" class="navbar-item">Wishlist&nbsp;<font-awesome-icon icon="heart" /></router-link>
+                    <router-link to="/watched" class="navbar-item">Watched&nbsp;<font-awesome-icon icon="check" /></router-link>
                 </template>
 
                 <div class="navbar-item">
@@ -36,10 +36,10 @@
 
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faHeart, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faHeart)
+library.add(faHeart, faCheck)
 
   import axios from 'axios'
   

@@ -12,13 +12,13 @@
                 <th>Users rating</th>
                 <th></th>
                 <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
                 <tr
               v-for="movie in movies"
-              v-bind:key="movie.id"
-              @click="showMovieDetails(movie)">
+              v-bind:key="movie.id">
               <td class="has-text-centered">{{ movie.title }}</td>
               <td class="has-text-centered">
                     <span
@@ -35,18 +35,28 @@
             <td class="has-text-centered">
                 <span class="tag is-link">{{ movie.users_rating }}</span>
             </td>
-              <td >  
+            <td @click="showMovieDetails(movie)">
                 <font-awesome-icon icon="info-circle" />
               </td>
               <td>  
                 <button @click="deleteFromWatched(movie)"> 
                   <font-awesome-icon icon="times" /> </button>
             </td>
+            <td>  
+              <button @click="openRateModal(movie)">
+                <font-awesome-icon icon="star" />
+              </button>
+            </td>
             </tr>
             </tbody>
           </table>
           <!-- movie details modal -->
           <watched-modal
+            v-if="selectedMovie"
+            v-bind:movie="selectedMovie"
+            @close="selectedMovie = null"
+          />
+          <rate-modal
             v-if="selectedMovie"
             v-bind:movie="selectedMovie"
             @close="selectedMovie = null"
@@ -59,19 +69,21 @@
   <script>
 
   import WatchedModal from '@/components/WatchedModal.vue'
+  import RateModal from '@/components/RateModal.vue'
   import axios from 'axios'
+  import {toast} from 'bulma-toast'
   
   import { library } from '@fortawesome/fontawesome-svg-core'
-import { faInfoCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(faInfoCircle, faTimes)
+  import { faInfoCircle, faTimes, faStar } from '@fortawesome/free-solid-svg-icons'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  library.add(faInfoCircle, faTimes, faStar)
 
   export default {
     name: 'MoviesView',
     components: {
       WatchedModal,
-      FontAwesomeIcon
+      FontAwesomeIcon,
+      RateModal
     },
     data() {
       return {
@@ -87,25 +99,52 @@ library.add(faInfoCircle, faTimes)
         this.$store.commit('setIsLoading', true)
         const userId = this.$store.state.user.id
 
-        const wishlist = await axios.get(`/api/watched/?user=${userId}`)
-        this.movies = []
+        try {
+          await this.$store.dispatch('fetchWatched', userId)
+          this.movies = []
 
-        for (const wishlistItem of wishlist.data) {
-          const movie = await axios.get(`/api/movies/${wishlistItem.movie}/`)
-          this.movies.push(movie.data)
+          for (const watchedItem of this.$store.state.watched) {
+            const movie = await axios.get(`/api/movies/${watchedItem.movie}/`)
+            this.movies.push(movie.data)
+          }
+        } catch(error) {
+          console.log(error)
+        } finally {
+          this.$store.commit('setIsLoading', false)
         }
-
-        this.$store.commit('setIsLoading', false)
       },
       showMovieDetails(movie) {
         this.selectedMovie = movie
       },
+      openRateModal(movie) {
+        this.selectedMovie = movie
+      },
+      async deleteRate(movie) {
+        try {
+            const response = await axios.get(`/api/ratings?user=${this.$store.state.user.id}&movie=${movie.id}`)
+            if (response.data.find(r => r.movie === movie.id))  {
+                const rateId = response.data.find(r => r.movie === movie.id).id
+                await axios.delete(`/api/ratings/${rateId}`)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+      },
       async deleteFromWatched(movie) {
-        const userId = this.$store.state.user.id
-        const watched = await axios.get(`/api/watched/?user=${userId}`)
-        const watchedToDelete = watched.data.find(item => item.movie === movie.id)
-        await axios.delete(`/api/watched/${watchedToDelete.id}/`)
-        this.getMovies()
+        try {
+          await this.$store.dispatch('deleteFromWatched', movie)
+          this.deleteRate(movie)
+          this.getMovies()
+          toast({
+              message: `${movie.title} has been deleted.`,
+              type: 'is-danger',
+              duration: 3000,
+              position: 'bottom-center',
+              dismissible: true
+            })
+        } catch (error) {
+          console.log(error)
+        }
       },
     }
   }

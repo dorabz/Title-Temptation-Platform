@@ -18,8 +18,7 @@
             <tbody>
                 <tr
               v-for="movie in movies"
-              v-bind:key="movie.id"
-              @click="showMovieDetails(movie)">
+              v-bind:key="movie.id">
               <td class="has-text-centered">{{ movie.title }}</td>
               <td class="has-text-centered">
                     <span
@@ -36,17 +35,17 @@
             <td class="has-text-centered">
                 <span class="tag is-link">{{ movie.users_rating }}</span>
             </td>
-            <td>  
+            <td @click="showMovieDetails(movie)">
                 <font-awesome-icon icon="info-circle" />
-            </td>
+              </td>
             <td>  
                 <button @click="deleteFromWishlist(movie)">
-                  <font-awesome-icon icon="times-circle" /> </button>
+                  <font-awesome-icon icon="times" /> </button>
                   
             </td>
             <td>  
                 <button @click="moveToWatched(movie)">
-                  <font-awesome-icon icon="check-circle" /> </button>
+                  <font-awesome-icon icon="check" /> </button>
             </td>
             </tr>
             </tbody>
@@ -66,13 +65,12 @@
 
   import WishlistModal from '@/components/WishlistModal.vue'
   import axios from 'axios'
-  
+  import {toast} from 'bulma-toast'
   
   import { library } from '@fortawesome/fontawesome-svg-core'
-import { faInfoCircle, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(faInfoCircle, faTimesCircle, faCheckCircle)
+  import { faInfoCircle, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  library.add(faInfoCircle, faTimes, faCheck)
 
   export default {
     name: 'WishlistView',
@@ -94,44 +92,55 @@ library.add(faInfoCircle, faTimesCircle, faCheckCircle)
         this.$store.commit('setIsLoading', true)
         const userId = this.$store.state.user.id
 
-        const wishlist = await axios.get(`/api/wishlist/?user=${userId}`)
-        this.movies = []
+        try {
+          await this.$store.dispatch('fetchWishlist', userId)
+          this.movies = []
 
-        for (const wishlistItem of wishlist.data) {
-          const movie = await axios.get(`/api/movies/${wishlistItem.movie}/`)
-          this.movies.push(movie.data)
+          for (const wishlistItem of this.$store.state.wishlist) {
+            const movie = await axios.get(`/api/movies/${wishlistItem.movie}/`)
+            this.movies.push(movie.data)
+          }
+        } catch(error) {
+          console.log(error)
+        } finally {
+          this.$store.commit('setIsLoading', false)
         }
-
-        this.$store.commit('setIsLoading', false)
+      },
+      async deleteFromWishlist(movie) {
+        try {
+          await this.$store.dispatch('deleteFromWishlist', movie)
+          this.getMovies()
+          toast({
+              message: `${movie.title} has been deleted.`,
+              type: 'is-danger',
+              duration: 3000,
+              position: 'bottom-center',
+              dismissible: true
+            })
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      async moveToWatched(movie) {
+        try {
+          await this.$store.dispatch('moveToWatched', movie)
+          this.getMovies()
+          toast({
+              message: `${movie.title} has been moved to Watched list.`,
+              type: 'is-warning',
+              duration: 3000,
+              position: 'bottom-center',
+              dismissible: true
+            })
+        } catch (error) {
+          console.log(error)
+        }
       },
       showMovieDetails(movie) {
         this.selectedMovie = movie
-      },
-      async deleteFromWishlist(movie) {
-        const userId = this.$store.state.user.id
-        const wishlist = await axios.get(`/api/wishlist/?user=${userId}`)
-        const wishlistToDelete = wishlist.data.find(item => item.movie === movie.id)
-        await axios.delete(`/api/wishlist/${wishlistToDelete.id}/`)
-        this.getMovies()
-      },
-      async moveToWatched(movie) {  
-        const userId = this.$store.state.user.id            
-        this.deleteFromWishlist(movie)
-          
-          const data = {
-            user: userId,
-            movie: movie.id
-          }
-
-          await axios.post('/api/watched/', data)
-            .then(response => {
-              console.log(response.data)
-              
-            })
-        this.getMovies()
-      },
-    }
+      }
   }
+}
   </script>
     
 <style scoped>

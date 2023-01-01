@@ -52,17 +52,15 @@
     </div>
   </template>
   
-  <script>
+<script>
 
   import MovieDetailsModal from '@/components/MovieDetailsModal.vue'
   import axios from 'axios'
-  import { mapState } from 'vuex'
   
   import { library } from '@fortawesome/fontawesome-svg-core'
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(faInfoCircle)
+  import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  library.add(faInfoCircle)
 
   export default {
     name: 'MoviesView',
@@ -73,13 +71,11 @@ library.add(faInfoCircle)
     data() {
       return {
         movies: [" "],
-        selectedMovie: null,
-        wishlist: []
+        selectedMovie: null
       }
     },
     mounted() {
       this.getMovies()
-      this.getWishlist()
     },
     methods: {
       async getMovies() {
@@ -96,33 +92,26 @@ library.add(faInfoCircle)
       showMovieDetails(movie) {
         this.selectedMovie = movie
       },
-      async getWishlist() {
-        const userId = this.$store.state.user.id
-        return axios.get(`/api/wishlist/?user=${userId}`)
-      },
     }
   }
-  </script>
+</script>
     
 <style scoped>
 
 .table tbody tr:hover {
   background-color: #2F4865;
 }
-
 .table th{
     color: #F1F1E6;
     background-color:#2F4865;
     font-family: 'Trebuchet Ms', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     text-align: center;
 }
-
 .table {
     color: #F1F1E6;
     background-color: #041220;
     font-family: 'Trebuchet Ms', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-
 .title {
     color: #F1F1E6;
     font-family: 'Trebuchet Ms', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
