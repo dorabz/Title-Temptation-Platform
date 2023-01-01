@@ -10,6 +10,6 @@ Repository for Movies website built with:
 
 TO DO:
 
-- refactor code: use store, add error handling
+- refactor code: 
 
-- funcionalities: add rating system, change password option, add movie suggestion system, pagination, search, random movie, filter
+- funcionalities:  pagination, search, random movie, filter, change password option, add movie suggestion system,
