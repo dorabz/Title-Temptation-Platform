@@ -1,6 +1,8 @@
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from rest_framework.pagination import PageNumberPagination
 
 from api import serializers
 from api.models import Movie, Genre, Rating, Watched, Wishlist
@@ -8,6 +10,9 @@ from api.models import Movie, Genre, Rating, Watched, Wishlist
 from rest_framework import status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+
+class MoviePagination(PageNumberPagination):
+    page_size = 2
 
 class GenreList(generics.ListCreateAPIView):
     queryset = Genre.objects.all()
@@ -20,6 +25,9 @@ class GenreDetail(generics.RetrieveUpdateDestroyAPIView):
 class MovieList(generics.ListCreateAPIView):
     queryset = Movie.objects.all()
     serializer_class = serializers.MovieSerializer
+    pagination_class = MoviePagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'genres__name')
 
 class MovieDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.all()

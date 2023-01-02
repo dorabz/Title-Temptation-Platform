@@ -52,14 +52,14 @@
           </table>
           <!-- movie details modal -->
           <watched-modal
-            v-if="selectedMovie"
+            v-if="showWatchedModal"
             v-bind:movie="selectedMovie"
-            @close="selectedMovie = null"
+            @close="showWatchedModal = false"
           />
           <rate-modal
-            v-if="selectedMovie"
+            v-if="showRateModal"
             v-bind:movie="selectedMovie"
-            @close="selectedMovie = null"
+            @close="showRateModal = false"
           />
         </div>
       </div>
@@ -88,7 +88,10 @@
     data() {
       return {
         movies: [" "],
-        selectedMovie: null
+        selectedMovie: null,
+        showWatchedModal: false,
+        showRateModal: false,
+
       }
     },
     mounted() {
@@ -115,9 +118,11 @@
       },
       showMovieDetails(movie) {
         this.selectedMovie = movie
+        this.showWatchedModal = true
       },
       openRateModal(movie) {
         this.selectedMovie = movie
+        this.showRateModal = true
       },
       async deleteRate(movie) {
         try {

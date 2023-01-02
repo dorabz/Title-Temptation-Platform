@@ -81,13 +81,14 @@
     data() {
       return {
         movies: [" "],
-        selectedMovie: null
+        selectedMovie: null,
       }
     },
     mounted() {
       this.getMovies()
     },
     methods: {
+      
       async getMovies() {
         this.$store.commit('setIsLoading', true)
         const userId = this.$store.state.user.id
