@@ -1,15 +1,102 @@
-# movies
+
+# Title Temptation platform
+
+Repository for a project called Title Temptation - website which lets you pick a movie based
+on a movie title. This project is made for educational purposes.
+
+## Badges
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 
-Repository for Movies website built with: 
-
-- backend: Django Rest Framework
-
-- frontend: Vue
+## 🛠 Technologies 
+Django, Django REST Framework, Vue.js, SQLite.
 
 
-TO DO:
 
-- refactor code: 
+## Features
 
-- funcionalities:  pagination, search, filter, change password option, add movie suggestion system
+- Register user 
+- Login user
+- Movie search & pagination
+- Create wishlist
+- Create watched list
+- Rating system
+
+
+## Installation
+
+Clone the project
+
+```bash
+  git clone https://link-to-project
+```
+
+Go to the project directory
+
+```bash
+  cd my-project
+```
+
+Go to the project backend directory
+
+```bash
+  cd back
+```
+
+Install requirements
+
+```bash
+  pip install -r requirements.txt
+```
+
+Make migrations
+
+```bash
+  python manage.py makemigrations
+  python manage.py migrate
+```
+
+Run server
+
+```bash
+  python manage.py runserver
+```
+
+Go to the project frontend directory
+
+```bash
+  cd front
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run start
+```
+
+
+## Run locally
+
+Run frontend
+
+```bash
+   http://localhost:8080
+```
+
+Run backend
+
+```bash
+   http://localhost:8000/api/
+```
+    
+## Feedback
+
+If you have any feedback, please reach out to me.
+
