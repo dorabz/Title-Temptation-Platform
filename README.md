@@ -95,7 +95,11 @@ Run backend
 ```bash
    http://localhost:8000/api/
 ```
-    
+
+## UI design
+
+![Alt text](/"webpage look"/landing_page.png?raw=true "Landing page")
+
 ## Feedback
 
 If you have any feedback, please reach out to me.
