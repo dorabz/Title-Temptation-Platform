@@ -3,6 +3,7 @@
       <div class="columns is-multiline">
         <div class="column is-12">
           <h1 class="title">Movies</h1>
+          <div class="field has-addons">
           <form @submit.prevent="getMovies">
                     <div class="field has-addons">
                         <div class="control">
@@ -13,7 +14,9 @@
                         </div>      
                     </div>
             </form>
-            <br/>
+          
+            <button class="button is-pulled-right" style="margin-left: 10px;" @click="selectRandomMovie"><font-awesome-icon icon="random" /></button>
+          </div>
           <table class="table is-fullwidth">
             <thead>
               <tr>
@@ -73,9 +76,9 @@
   import axios from 'axios'
   
   import { library } from '@fortawesome/fontawesome-svg-core'
-  import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+  import { faInfoCircle, faRandom } from '@fortawesome/free-solid-svg-icons'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  library.add(faInfoCircle)
+  library.add(faInfoCircle, faRandom)
 
   export default {
     name: 'MoviesView',
@@ -130,6 +133,17 @@
       showMovieDetails(movie) {
         this.selectedMovie = movie
       },
+      async selectRandomMovie() {
+        try {
+          // Make a request to the /api/movies/ endpoint to get a list of all movies
+          const response = await axios.get('/api/movies/')
+          // Select a random movie from the list of movies
+          const randomIndex = Math.floor(Math.random() * response.data.results.length)
+          this.selectedMovie = response.data.results[randomIndex]
+        } catch (error) {
+          console.error(error)
+        }
+    },
     }
   }
 </script>

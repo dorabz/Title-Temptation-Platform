@@ -108,8 +108,6 @@
           
           for (const watchedItem of this.$store.state.watched) {
             const movie = await axios.get(`/api/movies/${watchedItem.movie}/`)
-
-            
             this.movies.push(movie.data)
           }
         } catch(error) {

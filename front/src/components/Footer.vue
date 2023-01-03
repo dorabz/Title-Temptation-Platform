@@ -3,7 +3,7 @@
     <div class="container">
       <div class="content has-text-centered">
         <p>
-            Ⓒ Title Temptation
+            Ⓒ Title Temptation 2023
         </p>
       </div>
     </div>
