@@ -98,7 +98,7 @@ Run backend
 
 ## UI design
 
-![Alt text](/"webpage look"/landing_page.png?raw=true "Landing page")
+[![landing-page.png](https://i.postimg.cc/5tyHQ6Nt/landing-page.png)](https://postimg.cc/bGXYKYnX)
 
 ## Feedback
 
