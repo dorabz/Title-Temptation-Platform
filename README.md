@@ -29,13 +29,13 @@ Django, Django REST Framework, Vue.js, SQLite.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://Title-Temptation
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd Title-Temptation
 ```
 
 Go to the project backend directory
@@ -98,7 +98,7 @@ Run backend
 
 ## UI design
 
-[![landing-page.png](https://i.postimg.cc/zDV9253R/landing-page.png)](https://postimg.cc/Thv7hzVR)
+[![landing-page.png](https://i.postimg.cc/LXMpKb7M/landing-page.png)](https://postimg.cc/kVwZWfqj)
 
 ## Feedback
 
