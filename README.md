@@ -98,7 +98,7 @@ Run backend
 
 ## UI design
 
-[![landing-page.png](https://i.postimg.cc/5tyHQ6Nt/landing-page.png)](https://postimg.cc/bGXYKYnX)
+[![landing-page.png](https://i.postimg.cc/Y2zpktMD/landing-page.png)](https://postimg.cc/9zz3Y54y)
 
 ## Feedback
 
