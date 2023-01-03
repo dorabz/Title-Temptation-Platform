@@ -99,6 +99,8 @@ Run backend
 ## UI design
 
 [![landing-page.png](https://i.postimg.cc/LXMpKb7M/landing-page.png)](https://postimg.cc/kVwZWfqj)
+[![movies-page-page1.png](https://i.postimg.cc/HLn2WYqw/movies-page-page1.png)](https://postimg.cc/943TJhF0)
+
 
 ## Feedback
 
