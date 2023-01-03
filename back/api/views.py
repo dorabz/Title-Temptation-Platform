@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
 class MoviePagination(PageNumberPagination):
-    page_size = 20
+    page_size = 8
 
 class GenreList(generics.ListCreateAPIView):
     queryset = Genre.objects.all()
