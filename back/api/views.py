@@ -46,6 +46,17 @@ class WatchedList(generics.ListCreateAPIView):
     queryset = Watched.objects.all()
     serializer_class = serializers.WatchedSerializer
 
+    def get(self, request, format=None):
+        # Get the user id from the query parameters
+        user_id = request.query_params.get('user')
+
+        # Filter the Wishlist objects by the user id
+        watched = Watched.objects.filter(user=user_id)
+
+        # Serialize the list of Wishlist objects and return the response
+        serializer = serializers.WatchedSerializer(watched, many=True)
+        return Response(serializer.data)
+
 class WatchedDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Watched.objects.all()
     serializer_class = serializers.WatchedSerializer

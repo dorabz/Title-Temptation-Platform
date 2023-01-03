@@ -10,7 +10,7 @@
                         </div>
                         <div class="control">
                             <button class="button is-success">Search</button>
-                        </div>
+                        </div>      
                     </div>
             </form>
             <br/>
@@ -115,6 +115,7 @@
           .get(`/api/movies/?page=${this.currentPage}&search=${this.query}`)
           .then(response => {
             this.movies = response.data.results
+            
 
             if (response.data.next) {
               this.showNextButton = true

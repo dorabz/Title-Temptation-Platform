@@ -92,11 +92,11 @@
       async getMovies() {
         this.$store.commit('setIsLoading', true)
         const userId = this.$store.state.user.id
-
+        
         try {
           await this.$store.dispatch('fetchWishlist', userId)
           this.movies = []
-
+         
           for (const wishlistItem of this.$store.state.wishlist) {
             const movie = await axios.get(`/api/movies/${wishlistItem.movie}/`)
             this.movies.push(movie.data)

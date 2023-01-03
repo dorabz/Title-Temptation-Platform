@@ -11,7 +11,7 @@ export default createStore({
       username: '',
     },
     wishlist: [],
-    watched: [],
+    watched: []
   },
   mutations: {
     initializeStore(state) {
@@ -20,13 +20,15 @@ export default createStore({
         state.isAuthenticated = true
         state.user.username = localStorage.getItem('username')
         state.user.id = localStorage.getItem('userid')
-        state.wishlist = JSON.parse(localStorage.getItem('wishlist'))
+        state.wishlist = []
+        state.watched = []
       } else {
         state.token = ''
         state.isAuthenticated = false
         state.user.id = 0
         state.user.username = ''
         state.wishlist = []
+        state.watched = []
       }
     },
     setIsLoading(state, status) {

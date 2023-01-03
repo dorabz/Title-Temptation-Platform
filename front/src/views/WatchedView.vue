@@ -79,7 +79,7 @@
   library.add(faInfoCircle, faTimes, faStar)
 
   export default {
-    name: 'MoviesView',
+    name: 'WatchedView',
     components: {
       WatchedModal,
       FontAwesomeIcon,
@@ -95,19 +95,21 @@
       }
     },
     mounted() {
-      this.getMovies()
+      this.getWatched()
     },
     methods: {
-      async getMovies() {
+      async getWatched() {
         this.$store.commit('setIsLoading', true)
         const userId = this.$store.state.user.id
-
+      
         try {
           await this.$store.dispatch('fetchWatched', userId)
           this.movies = []
-
+          
           for (const watchedItem of this.$store.state.watched) {
             const movie = await axios.get(`/api/movies/${watchedItem.movie}/`)
+
+            
             this.movies.push(movie.data)
           }
         } catch(error) {
@@ -139,7 +141,7 @@
         try {
           await this.$store.dispatch('deleteFromWatched', movie)
           this.deleteRate(movie)
-          this.getMovies()
+          this.getWatched()
           toast({
               message: `${movie.title} has been deleted.`,
               type: 'is-danger',
